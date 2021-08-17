@@ -38,7 +38,6 @@ function createCharts(sample) {
   d3.json('samples.json').then(function ({ samples, metadata }) {
     const data = samples.filter((obj) => obj.id == sample)[0];
 
-    //bar chart
     const barChart = {
       otuIds: data.otu_ids.map((row) => `OTU ${row}`),
       values: data.sample_values.slice(0, 10),
@@ -47,18 +46,15 @@ function createCharts(sample) {
         .map((label) => label.replaceAll(';', ', ')),
     };
 
-    //bubble chart
     const bubbleChart = {
       otuIds: data.otu_ids,
       values: data.sample_values,
       labels: data.otu_labels.map((label) => label.replaceAll(';', ', ')),
     };
 
-    //gauge
     const gaugeData = metadata.filter((obj) => obj.id == sample)[0];
     const wfreq = (gaugeData && gaugeData.wfreq) || {};
 
-    //bar chart
     const data1 = [
       {
         x: barChart.values,
@@ -70,7 +66,6 @@ function createCharts(sample) {
       },
     ];
 
-    //bubble chart
     const data2 = [
       {
         x: bubbleChart.otuIds,
@@ -84,13 +79,12 @@ function createCharts(sample) {
       },
     ];
 
-    //gauge chart
     const data3 = [
       {
         value: wfreq,
         title: {
           text: 'Scrubs per Week',
-          font: { size: 24 },
+          font: { size: 12, color: 'grey' },
         },
         type: 'indicator',
         mode: 'gauge+number',
@@ -112,27 +106,32 @@ function createCharts(sample) {
       },
     ];
 
-    // layout for bar chart
     const layout1 = {
       margin: {
         t: 40,
         l: 150,
       },
       title: {
-        text: 'Top 10 Bacterial Species (OTUs)',
+        text: 'Top 10 Bacterial Cultures Found',
       },
     };
 
     // layout for bubble chart
     const layout2 = {
       xaxis: { title: 'OTU ID' },
+      title: {
+        text: 'Bacteria Cultures Per Sample',
+      },
     };
 
     // layout for gauge chart
     const layout3 = {
       width: 300,
       height: 200,
-      margin: { t: 75, r: 25, l: 25, b: 25 },
+      margin: { t: 100, r: 25, l: 25, b: 25 },
+      title: {
+        text: 'Belly Button Washing Frequency',
+      },
     };
 
     Plotly.newPlot('bar', data1, layout1);
